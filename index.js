@@ -23,7 +23,7 @@ const client = new Client();
 const DISCORD_TOKEN = character.token || process.env.DISCORD_TOKEN;
 const messageBuffers = {};
 const seenMessages = new Set();
-let ALLOWED_USERS = ['940246394281795595','1257286620151812207','1257286620151812207'];
+let ALLOWED_USERS = ['940246'];
 
 // Import memory utilities
 // const updateMemory = require('./utils/memory').updateMemory;

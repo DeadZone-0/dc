@@ -1,0 +1,11 @@
+{
+  "dailyMessageCount": 152,
+  "botState": {
+    "mood": "neutral",
+    "energy": "normal",
+    "isAway": false,
+    "currentAction": "idle",
+    "lastUpdateTime": 1758719803262
+  },
+  "pendingDMRequests": []
+}

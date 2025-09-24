@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bot Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="amoled-theme">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-info">
+                    <h2 id="bot-name">AI Assistant</h2>
+                    <p id="bot-role">Loading...</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li data-tab="overview" class="active">
+                        <i class="fas fa-home"></i>
+                        <span>Overview</span>
+                    </li>
+                    <li data-tab="servers">
+                        <i class="fas fa-server"></i>
+                        <span>Servers</span>
+                        <div class="badge" id="servers-count">0</div>
+                    </li>
+                    <li data-tab="users">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                        <div class="badge" id="users-count">0</div>
+                    </li>
+                    <li data-tab="requests">
+                        <i class="fas fa-bell"></i>
+                        <span>Requests</span>
+                        <div class="badge" id="requests-count">0</div>
+                    </li>
+                    <li data-tab="activity">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Activity</span>
+                    </li>
+                    <li data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="bot-status">
+                    <div class="status-indicator" id="status-indicator"></div>
+                    <span id="status-text">Initializing...</span>
+                </div>
+                <div class="bot-mood" id="bot-mood">
+                    <i class="fas fa-smile"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Tab -->
+            <section id="overview" class="content-tab active">
+                <div class="section-header">
+                    <h1>Overview</h1>
+                    <div class="time-display" id="current-time"></div>
+                </div>
+
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Bot Status</h3>
+                            <p id="bot-status-detail">Initializing</p>
+                        </div>
+                        <div class="stat-actions">
+                            <button class="stat-action-btn" id="toggle-away-btn">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Active Users</h3>
+                            <p><span id="allowed-users-count">0</span> total</p>
+                        </div>
+                        <div class="stat-actions">
+                            <button class="stat-action-btn" id="view-users-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Pending Requests</h3>
+                            <p><span id="pending-requests-count">0</span> waiting</p>
+                        </div>
+                        <div class="stat-actions">
+                            <button class="stat-action-btn" id="view-requests-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-comment-alt"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Messages Today</h3>
+                            <p><span id="messages-today-count">0</span> msgs</p>
+                        </div>
+                        <div class="stat-actions">
+                            <button class="stat-action-btn" id="view-activity-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="current-interaction-card">
+                    <div class="card-header">
+                        <h3>Current AI Interaction</h3>
+                        <div class="interaction-actions">
+                            <button class="interaction-btn" id="toggle-prompt-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="interaction-btn" id="copy-prompt-btn">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="interaction-meta">
+                            <div class="interaction-user">
+                                <i class="fas fa-user"></i>
+                                <span id="current-username">No active interaction</span>
+                            </div>
+                            <div class="interaction-time" id="interaction-time"></div>
+                        </div>
+                        <div class="interaction-details">
+                            <div class="interaction-prompt" id="current-prompt-container">
+                                <pre id="current-prompt" class="hidden">No current prompt</pre>
+                            </div>
+                            <div class="interaction-response" id="current-response-container">
+                                <pre id="current-response">No current response</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activity-container">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                        <button class="view-all-btn" id="view-all-activity-btn">
+                            View All
+                        </button>
+                    </div>
+                    <div class="activity-logs" id="recent-activity-logs">
+                        <div class="activity-placeholder">No recent activity</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Servers Tab -->
+            <section id="servers" class="content-tab">
+                <div class="section-header">
+                    <h1>Servers</h1>
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <input type="text" id="server-search" placeholder="Search servers...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="filter-container">
+                            <select id="server-filter">
+                                <option value="all">All Servers</option>
+                                <option value="active">Active Only</option>
+                                <option value="inactive">Inactive Only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="servers-grid" id="servers-grid">
+                    <!-- Server cards will be dynamically added here -->
+                    <div class="empty-state">
+                        <i class="fas fa-server fa-3x"></i>
+                        <p>No servers found</p>
+                    </div>
+                </div>
+
+                <div class="server-detail-view" id="server-detail-view">
+                    <div class="detail-header">
+                        <button class="back-btn" id="server-back-btn">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2 id="server-detail-name">Server Name</h2>
+                        <div class="server-detail-id" id="server-detail-id">ID: 123456789</div>
+                    </div>
+                    
+                    <div class="detail-tabs">
+                        <button class="detail-tab-btn active" data-tab="server-users">Users</button>
+                        <button class="detail-tab-btn" data-tab="server-memory">Memory</button>
+                        <button class="detail-tab-btn" data-tab="server-messages">Recent Messages</button>
+                    </div>
+                    
+                    <div class="detail-content">
+                        <div class="detail-pane active" id="server-users">
+                            <div class="users-list" id="server-users-list">
+                                <!-- Server user cards will be added here -->
+                                <div class="empty-state">
+                                    <i class="fas fa-users fa-3x"></i>
+                                    <p>No users in this server</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-pane" id="server-memory">
+                            <div class="memory-facts" id="server-memory-facts">
+                                <!-- Server memory facts will be added here -->
+                                <div class="empty-state">
+                                    <i class="fas fa-brain fa-3x"></i>
+                                    <p>No memory facts for this server</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-pane" id="server-messages">
+                            <div class="message-list" id="server-message-list">
+                                <!-- Server messages will be added here -->
+                                <div class="empty-state">
+                                    <i class="fas fa-comment fa-3x"></i>
+                                    <p>No recent messages</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Tab -->
+            <section id="users" class="content-tab">
+                <div class="section-header">
+                    <h1>Allowed Users</h1>
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <input type="text" id="user-search" placeholder="Search users...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="users-container" id="allowed-users-container">
+                    <!-- User cards will be dynamically added here -->
+                    <div class="empty-state">
+                        <i class="fas fa-users fa-3x"></i>
+                        <p>No users found</p>
+                    </div>
+                </div>
+                
+                <div class="user-detail-view" id="user-detail-view">
+                    <div class="detail-header">
+                        <button class="back-btn" id="user-back-btn">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div class="user-detail-avatar" id="user-detail-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-detail-info">
+                            <h2 id="user-detail-name">Username</h2>
+                            <div class="user-detail-id" id="user-detail-id">ID: 123456789</div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-tabs">
+                        <button class="detail-tab-btn active" data-tab="user-conversation">Conversation</button>
+                        <button class="detail-tab-btn" data-tab="user-memory">Memory</button>
+                        <button class="detail-tab-btn" data-tab="user-settings">Settings</button>
+                    </div>
+                    
+                    <div class="detail-content">
+                        <div class="detail-pane active" id="user-conversation">
+                            <div class="conversation-container" id="user-conversation-container">
+                                <!-- Conversation messages will be added here -->
+                                <div class="empty-state">
+                                    <i class="fas fa-comment fa-3x"></i>
+                                    <p>No conversation history</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-pane" id="user-memory">
+                            <div class="memory-container">
+                                <div class="memory-metrics">
+                                    <div class="memory-metric">
+                                        <label>Trust Level:</label>
+                                        <div class="metric-value" id="user-trust-level">5</div>
+                                    </div>
+                                    <div class="memory-metric">
+                                        <label>Censorship Level:</label>
+                                        <div class="metric-value" id="user-censorship-level">8</div>
+                                    </div>
+                                    <div class="memory-metric">
+                                        <label>Romantic Level:</label>
+                                        <div class="metric-value" id="user-romantic-level">0</div>
+                                    </div>
+                                </div>
+                                <div class="memory-facts" id="user-memory-facts">
+                                    <!-- User memory facts will be added here -->
+                                    <div class="empty-state">
+                                        <i class="fas fa-brain fa-3x"></i>
+                                        <p>No memory facts</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-pane" id="user-settings">
+                            <div class="user-settings-container">
+                                <div class="setting-group">
+                                    <h3>Interaction Settings</h3>
+                                    <div class="setting-item">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="user-auto-reply">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                        <div class="setting-label">Auto-Reply</div>
+                                        <div class="setting-description">Automatically reply to this user without approval</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="setting-group">
+                                    <h3>User Management</h3>
+                                    <div class="setting-actions">
+                                        <button class="danger-btn" id="remove-user-btn">
+                                            <i class="fas fa-user-slash"></i>
+                                            Remove User
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </section>
+
+            <!-- Requests Tab -->
+            <section id="requests" class="content-tab">
+                <div class="section-header">
+                    <h1>Pending DM Requests</h1>
+                </div>
+
+                <div class="requests-container" id="pending-requests-container">
+                    <!-- Request cards will be dynamically added here -->
+                    <div class="empty-state">
+                        <i class="fas fa-bell fa-3x"></i>
+                        <p>No pending requests</p>
+                    </div>
+                </div>
+    </section>
+
+            <!-- Activity Tab -->
+            <section id="activity" class="content-tab">
+                <div class="section-header">
+                    <h1>Activity Log</h1>
+                    <div class="header-actions">
+                        <button class="action-btn" id="clear-logs-btn">
+                            <i class="fas fa-trash"></i>
+                            Clear Logs
+                        </button>
+                    </div>
+                </div>
+
+                <div class="activity-container">
+                    <div class="activity-logs" id="activity-logs">
+                        <!-- Activity log entries will be dynamically added here -->
+                        <div class="empty-state">
+                            <i class="fas fa-chart-line fa-3x"></i>
+                            <p>No activity recorded</p>
+                        </div>
+                    </div>
+                </div>
+    </section>
+
+            <!-- Settings Tab -->
+            <section id="settings" class="content-tab">
+                <div class="section-header">
+                    <h1>Bot Settings</h1>
+                </div>
+
+                <div class="settings-container">
+                    <div class="setting-card">
+                        <h3>Bot Mood</h3>
+                        <div class="setting-content">
+                            <div class="mood-selector">
+                                <button class="mood-btn" data-mood="happy">
+                                    <i class="fas fa-grin"></i>
+                                    <span>Happy</span>
+                                </button>
+                                <button class="mood-btn active" data-mood="neutral">
+                                    <i class="fas fa-smile"></i>
+                                    <span>Neutral</span>
+                                </button>
+                                <button class="mood-btn" data-mood="sad">
+                                    <i class="fas fa-frown"></i>
+                                    <span>Sad</span>
+                                </button>
+                                <button class="mood-btn" data-mood="angry">
+                                    <i class="fas fa-angry"></i>
+                                    <span>Angry</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-card">
+                        <h3>Energy Level</h3>
+                        <div class="setting-content">
+                            <div class="energy-slider-container">
+                                <input type="range" min="1" max="3" value="2" class="energy-slider" id="energy-slider">
+                                <div class="energy-labels">
+                                    <span>Low</span>
+                                    <span>Normal</span>
+                                    <span>High</span>
+                                </div>
+                            </div>
+                            <div class="energy-value" id="energy-value">Normal</div>
+                        </div>
+                    </div>
+
+                    <div class="setting-card">
+                        <h3>Away Mode</h3>
+                        <div class="setting-content">
+                            <div class="setting-item">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="away-mode-toggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <div class="setting-label">Away Status</div>
+                                <div class="setting-description">When enabled, the bot will not respond to any messages</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-card">
+                        <h3>Theme Settings</h3>
+                        <div class="setting-content">
+                            <div class="theme-selector">
+                                <button class="theme-btn active" data-theme="amoled">
+                                    <div class="theme-preview amoled"></div>
+                                    <span>AMOLED Dark</span>
+                                </button>
+                                <button class="theme-btn" data-theme="dark">
+                                    <div class="theme-preview dark"></div>
+                                    <span>Dark</span>
+                                </button>
+                                <button class="theme-btn" data-theme="light">
+                                    <div class="theme-preview light"></div>
+                                    <span>Light</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for user confirmation -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Confirm Action</h3>
+                <button class="close-btn" id="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                Are you sure you want to perform this action?
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" id="modal-cancel-btn">Cancel</button>
+                <button class="confirm-btn" id="modal-confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
